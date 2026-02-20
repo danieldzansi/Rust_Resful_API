@@ -2,8 +2,9 @@
 
 use sea_orm::entity::prelude::*;
 
-#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq)]
-#[sea_orm(table_name = "todos")]
+use serde::{Serialize, Deserialize};
+
+#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Serialize, Deserialize)]
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
     pub id: Uuid,
@@ -14,5 +15,9 @@ pub struct Model {
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {}
+
+#[derive(Copy, Clone, Debug, Default, DeriveEntity)]
+#[sea_orm(table_name = "todos")]
+pub struct Entity;
 
 impl ActiveModelBehavior for ActiveModel {}

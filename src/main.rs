@@ -14,14 +14,11 @@ use tokio::net::TcpListener;
 #[tokio::main]
 async fn main() {
 
-    // Connect database
     let db = connect_db().await;
     println!("Database connected");
 
-    // attach DB to app state
     let app = create_routes().with_state(db);
 
-    // start server
     let listener = TcpListener::bind("0.0.0.0:3000").await.unwrap();
 
     println!("Server running on http://localhost:3000");

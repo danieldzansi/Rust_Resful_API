@@ -21,4 +21,15 @@ impl TodoRepositoy {
         };
         todo.insert(db).await
     }
+
+    pub async fn get_all(
+        db :&DatabaseConnection,
+    ) ->Result<Vec<todos::Model>,sea_orm::DbErr>{
+        use sea_orm::EntityTrait;
+
+        todos::Entity::find().all(db).await
+    }
 }
+
+
+

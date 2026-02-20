@@ -15,4 +15,10 @@ impl TodoService {
         }
         TodoRepositoy::create(db, dto).await
     }
+
+    pub async fn get_all_todos(
+        db: &DatabaseConnection,
+    ) -> Result<Vec<Model>, sea_orm::DbErr> {
+        TodoRepositoy::get_all(db).await
+    }
 }
