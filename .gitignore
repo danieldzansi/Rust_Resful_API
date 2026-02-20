@@ -1,2 +1,37 @@
-/target
+/target/
 .env
+# Ignore migration build artifacts
+migration/target/
+migration/debug/
+migration/build/
+migration/incremental/
+migration/deps/
+migration/examples/
+
+# Ignore Cargo.lock for libraries (optional)
+Cargo.lock
+
+# Ignore backup and temporary files
+*.rs.bk
+*.swp
+*.tmp
+
+# Ignore IDE/editor files
+.idea/
+.vscode/
+
+# Ignore logs
+*.log
+
+# Ignore by default
+.DS_Store
+Thumbs.db
+
+# Ignore other common files
+node_modules/
+
+# Ignore compiled binaries
+*.exe
+*.dll
+*.so
+*.dylib
