@@ -34,4 +34,11 @@ impl TodoService {
         }
         TodoRepositoy::update(db, payload, id).await
     }
+
+    pub async fn delete_todo(
+        db: &DatabaseConnection,
+        id: Uuid,
+    ) -> Result<(), sea_orm::DbErr> {
+        TodoRepositoy::delete(db, id).await
+    }
 }

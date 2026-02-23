@@ -37,3 +37,13 @@ pub async fn update_todo(
         Err(e) => Err(e.to_string()),
     }
 }
+
+pub async fn delete_todo(
+    State(db): State<DatabaseConnection>,
+    Path(id): Path<Uuid>,
+) -> Result<Json<String>, String> {
+    match TodoService::delete_todo(&db, id).await {
+        Ok(_) => Ok(Json("Todo deleted successfully".to_string())),
+        Err(e) => Err(e.to_string()),
+    }
+}

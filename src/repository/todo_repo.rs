@@ -9,6 +9,7 @@ use crate::dto::todo_dto::UpdateTodo;
 pub struct TodoRepositoy;
 
 impl TodoRepositoy {
+        
     pub async fn create(
         db: &DatabaseConnection,
         dto: CreateTodoDto,
@@ -47,6 +48,19 @@ impl TodoRepositoy {
         }
 
     }
+
+    pub async fn delete(
+            db: &DatabaseConnection,
+            id: Uuid,
+        ) -> Result<(), sea_orm::DbErr> {
+            use sea_orm::EntityTrait;
+            let res = todos::Entity::delete_by_id(id).exec(db).await?;
+            if res.rows_affected == 0 {
+                Err(sea_orm::DbErr::RecordNotFound("Todo not found".into()))
+            } else {
+                Ok(())
+            }
+        }
 }
 
 
