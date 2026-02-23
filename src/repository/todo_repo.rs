@@ -4,6 +4,7 @@ use chrono::Utc;
 
 use crate::entities::todos;
 use crate::dto::todo_dto::CreateTodoDto;
+use crate::dto::todo_dto::UpdateTodo;
 
 pub struct TodoRepositoy;
 
@@ -28,6 +29,23 @@ impl TodoRepositoy {
         use sea_orm::EntityTrait;
 
         todos::Entity::find().all(db).await
+    }
+
+    pub async fn update(
+        db: &DatabaseConnection,
+        payload: UpdateTodo,
+        id: Uuid,
+    ) -> Result<todos::Model, sea_orm::DbErr> {
+        use sea_orm::EntityTrait;
+        if let Some(todo) = todos::Entity::find_by_id(id).one(db).await? {
+            let mut active_todo: todos::ActiveModel = todo.into();
+            active_todo.description = Set(payload.description);
+            active_todo.completed = Set(payload.completed);
+            active_todo.update(db).await
+        } else {
+            Err(sea_orm::DbErr::RecordNotFound("Todo not found".into()))
+        }
+
     }
 }
 

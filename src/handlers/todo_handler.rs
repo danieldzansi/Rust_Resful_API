@@ -1,7 +1,10 @@
 use axum::{extract::State, Json};
+use axum::extract::Path;
 use sea_orm::DatabaseConnection;
+use uuid::Uuid;
 
 use crate::dto::todo_dto::CreateTodoDto;
+use crate::dto::todo_dto::UpdateTodo;
 use crate::service::todo_service::TodoService;
 use crate::entities::todos::Model;
 
@@ -21,5 +24,16 @@ pub async fn get_all_todos(
     match TodoService::get_all_todos(&db).await{
         Ok(todos)=>Json(todos),
         Err(e)=> Json(vec![]),
+    }
+}
+
+pub async fn update_todo(
+    State(db): State<DatabaseConnection>,
+    Path(id): Path<Uuid>,
+    Json(payload): Json<UpdateTodo>,
+) -> Result<Json<Model>, String> {
+    match TodoService::update_todo(&db, id, payload).await {
+        Ok(todo) => Ok(Json(todo)),
+        Err(e) => Err(e.to_string()),
     }
 }
