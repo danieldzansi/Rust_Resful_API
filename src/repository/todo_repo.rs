@@ -1,3 +1,4 @@
+use bcrypt::{hash, DEFAULT_COST};
 use crate::entities::users;
 use sea_orm::{ActiveModelTrait, Set, DatabaseConnection};
 use uuid::Uuid;
@@ -72,10 +73,12 @@ impl UserRepository {
         db: &DatabaseConnection,
         dto: CreateUser
     ) -> Result<users::Model, sea_orm::DbErr> {
+        let hashed = hash(dto.passord, DEFAULT_COST)
+            .map_err(|e| sea_orm::DbErr::Custom(format!("Hash error: {}", e)))?;
         let user = users::ActiveModel {
             id: Set(Uuid::new_v4()),
             email: Set(dto.email),
-            password: Set(dto.passord),
+            password: Set(hashed),
             created_at: Set(Utc::now().into()),
             ..Default::default()
         };
