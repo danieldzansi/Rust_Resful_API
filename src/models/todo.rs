@@ -9,3 +9,11 @@ pub struct Todo {
     pub completed: bool,
     pub created_at: DateTime<Utc>,
 }
+
+
+pub struct User {
+    pub id : Uuid,
+    pub email :String,
+    pub password :String,
+    pub created_at :DateTime<Utc>,
+}

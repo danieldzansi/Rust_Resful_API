@@ -1,3 +1,4 @@
+use crate::entities::users;
 use sea_orm::{ActiveModelTrait, Set, DatabaseConnection};
 use uuid::Uuid;
 use chrono::Utc;
@@ -5,10 +6,13 @@ use chrono::Utc;
 use crate::entities::todos;
 use crate::dto::todo_dto::CreateTodoDto;
 use crate::dto::todo_dto::UpdateTodo;
+use crate::dto::todo_dto::CreateUser;
 
-pub struct TodoRepositoy;
+pub struct TodoRepository;
 
-impl TodoRepositoy {
+pub struct UserRepository;
+
+impl TodoRepository {
         
     pub async fn create(
         db: &DatabaseConnection,
@@ -61,6 +65,22 @@ impl TodoRepositoy {
                 Ok(())
             }
         }
+}
+
+impl UserRepository {
+    pub async fn createuser(
+        db: &DatabaseConnection,
+        dto: CreateUser
+    ) -> Result<users::Model, sea_orm::DbErr> {
+        let user = users::ActiveModel {
+            id: Set(Uuid::new_v4()),
+            email: Set(dto.email),
+            password: Set(dto.passord),
+            created_at: Set(Utc::now().into()),
+            ..Default::default()
+        };
+        user.insert(db).await
+    }
 }
 
 
